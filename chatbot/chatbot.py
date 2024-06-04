@@ -22,7 +22,7 @@ def trainIntentModel():
     # Load the dataset and prepare it to the train the model
 
     # Importing dataset and splitting into words and labels
-    dataset = pd.read_csv('GreenBot\datasets\intents.json', names=["Query", "Intent"])
+    dataset = pd.read_csv('chatbot\datasets\intents.json', names=["Query", "Intent"])
 
     X = dataset["Query"]
     y = dataset["Intent"]
@@ -59,7 +59,7 @@ def trainIntentModel():
     print("Bag of words created!")
     
     # Save the CountVectorizer
-    pk.dump(countVectorizer, open("GreenBot\saved_state\IntentCountVectorizer.sav", 'wb'))
+    pk.dump(countVectorizer, open("chatbot\saved_state\IntentCountVectorizer.sav", 'wb'))
     print("Intent CountVectorizer saved!")
     
     # Encode the intent classes
