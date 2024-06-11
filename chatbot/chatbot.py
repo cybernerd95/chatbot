@@ -16,13 +16,11 @@ from keras.models import load_model
 import tensorflow
 
 
-
-
 def trainIntentModel():
     # Load the dataset and prepare it to the train the model
 
     # Importing dataset and splitting into words and labels
-    dataset = pd.read_csv('chatbot\datasets\intents.json', names=["Query", "Intent"])
+    dataset = pd.read_csv('chatbot\datasets\intent.csv', names=["Query", "Intent"])
 
     X = dataset["Query"]
     y = dataset["Intent"]
@@ -106,14 +104,14 @@ def trainIntentModel():
 intent_model, intent_label_map = trainIntentModel()
 
 # Save the Intent model
-intent_model.save('saved_state/intent_model.h5')
+intent_model.save('chatbot\saved_state\intent_model.h5')
 print("Intent model saved!")
 
 
 
 def trainEntityModel():
     # Importing dataset and splitting into words and labels
-    dataset = pd.read_csv('datasets/data-tags.csv', names=["word", "label"])
+    dataset = pd.read_csv('chatbot\datasets\data-tags.csv', names=["word", "label"])
     X = dataset.iloc[:, :-1].values
     y = dataset.iloc[:, 1].values
 #     X = X.reshape(630,)
@@ -142,7 +140,7 @@ def trainEntityModel():
     print("Entity Bag of words created!")
     
     # Save CountVectorizer state
-    pk.dump(cv, open('saved_state/EntityCountVectorizer.sav', 'wb'))
+    pk.dump(cv, open('chatbot/saved_state/EntityCountVectorizer.sav', 'wb'))
     print("Entity CountVectorizer state saved!")
     
     # Encoding categorical data of labels
@@ -163,7 +161,7 @@ def trainEntityModel():
     print("Entity Model trained successfully!")
     
     # Save the entity classifier model
-    pk.dump(classifier, open('saved_state/entity_model.sav', 'wb'))
+    pk.dump(classifier, open('chatbot\saved_state\entity_model.sav', 'wb'))
     print("Trained entity model saved!")
     
     return entity_label_map
@@ -174,8 +172,8 @@ def trainEntityModel():
 # Load Entity model
 entity_label_map = trainEntityModel()
 
-loadedEntityCV = pk.load(open('saved_state/EntityCountVectorizer.sav', 'rb'))
-loadedEntityClassifier = pk.load(open('saved_state/entity_model.sav', 'rb'))
+loadedEntityCV = pk.load(open('chatbot\saved_state\EntityCountVectorizer.sav', 'rb'))
+loadedEntityClassifier = pk.load(open('chatbot\saved_state\entity_model.sav', 'rb'))
 
 
 
@@ -199,12 +197,12 @@ def getEntities(query):
 import json
 import random
 
-with open('datasets/intents.json') as json_data:
+with open('chatbot\datasets\intents.json') as json_data:
     intents = json.load(json_data)
 
 # Load model to predict user result
-loadedIntentClassifier = load_model('saved_state/intent_model.h5')
-loaded_intent_CV = pk.load(open('saved_state/IntentCountVectorizer.sav', 'rb'))    
+loadedIntentClassifier = load_model('chatbot\saved_state\intent_model.h5')
+loaded_intent_CV = pk.load(open('chatbot\saved_state\IntentCountVectorizer.sav', 'rb'))    
 
 USER_INTENT = ""
 
